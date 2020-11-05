@@ -14,7 +14,6 @@ const store = {
 router.get('/resources/select/:id', (req, res) => {
     console.log(req.params);
     const idx = req.params.id;
-    const { params: {id} } = req;
 
     res.send(store.resources[idx]);
 });
@@ -42,7 +41,6 @@ router.get('/resources/add', (req, res) => {
 
 router.get('/resources/delete/:id', (req, res) => {
     const idx = req.params.id;
-    const { params: {id} } = req;
 
     delete store.resources[idx];
 
@@ -56,8 +54,6 @@ router.get('/resources/update/:id', (req, res) => {
 
     store.resources[idx].name = "NameUpdate";
     store.resources[idx].attr = "AttrUpdate";
-
-    const { params: {id} } = req;
 
     console.log(store.resources);
 

@@ -5,5 +5,3 @@ function printReq(req, res, next){
 }
 
 exports.printReq = printReq;
-
-console.log('Test')
