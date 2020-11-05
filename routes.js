@@ -31,19 +31,20 @@ router.put('/resources/:id', (req, res) => {
 // patch une ressource
 router.patch('/resources/:id', (req, res) => {
     const id = req.params.id
-    store.resources.patch(id, {...req.body})
-    res.json({resource: req.body})
+    store.resources.patch(id, req.body)
+    res.json({resource: store.resources.getById(id)})
 })
 
 // supprimer
 router.delete('/resources/:id', (req, res) => {
     const id = req.params.id
-    if (store.resources.getById(id) === req.body.id) {
-        store.resources.delete(id)
+
+    if(!store.resources.delete(id)){
+        return res.status(404).end();
+    }
+    else{
         res.json({ success: true, result: store.resources.getAll() })
     }
-    else
-        res.status(404).end()
 
 })
 
