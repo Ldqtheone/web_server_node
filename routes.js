@@ -18,11 +18,15 @@ router.get('/resources/select/:id', (req, res) => {
     res.send(store.resources[idx]);
 });
 
-router.get('/resources/add', (req, res) => {
+router.get('/resources/add/:name/:attr', (req, res) => {
+
+    const name = req.params.name;
+    const attr = req.params.attr;
+
     let max = 0;
 
-    for (let property in store.resources) {
-        max = (max < parseFloat(property)) ? parseFloat(property) : max;
+    for (let maxIndex in store.resources) {
+        max = (max < parseFloat(maxIndex)) ? parseFloat(maxIndex) : max;
     }
 
     let maxValue = max + 1;
@@ -30,8 +34,8 @@ router.get('/resources/add', (req, res) => {
     console.log(max + 1);
 
     store.resources[maxValue] = {
-            name: "Coco",
-            attr: "Abricoto"
+            name: name,
+            attr: attr
         };
 
     console.log(store.resources);
@@ -49,11 +53,13 @@ router.get('/resources/delete/:id', (req, res) => {
     res.send('Deleting id : ' + idx);
 });
 
-router.get('/resources/update/:id', (req, res) => {
+router.get('/resources/update/:id/:newName/:newAttr', (req, res) => {
     const idx = req.params.id;
+    const newName = req.params.newName;
+    const newAttr = req.params.newAttr;
 
-    store.resources[idx].name = "NameUpdate";
-    store.resources[idx].attr = "AttrUpdate";
+    store.resources[idx].name = newName;
+    store.resources[idx].attr = newAttr;
 
     console.log(store.resources);
 
