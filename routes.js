@@ -33,15 +33,15 @@ router.patch('/resources/:id', (req, res) => {
     const id = req.params.id
     const resource = { ...store.resources.getById(id), ...req.body }
     store.resources.patch(id, resource)
-    res.json(resource)
+    res.json({resource: resource})
 })
 
 // supprimer
 router.delete('/resources/:id', (req, res) => {
     const id = req.params.id
-    if (id === req.body.id) {
+    if (store.resources.getById(id) === req.body.id) {
         store.resources.delete(id)
-        res.json({ success: true })
+        res.json({ success: true, result: store.resources.getAll() })
     }
     else
         res.status(404).end()

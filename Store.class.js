@@ -32,6 +32,10 @@ class Store{
         this.content[id].answer = "J'ai patché";
     }
 
+    getAll(){
+        return this.content;
+    }
+
     autoSave() {
 
     }
