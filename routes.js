@@ -31,9 +31,8 @@ router.put('/resources/:id', (req, res) => {
 // patch une ressource
 router.patch('/resources/:id', (req, res) => {
     const id = req.params.id
-    const resource = { ...store.resources.getById(id), ...req.body }
-    store.resources.patch(id, resource)
-    res.json({resource: resource})
+    store.resources.patch(id, {...req.body})
+    res.json({resource: req.body})
 })
 
 // supprimer

@@ -17,7 +17,9 @@ class Store{
     }
 
     delete(id){
-        delete this.content[id];
+        if (id === this.content[id]) {
+            delete this.content[id];
+        }
     }
 
     replace(id, resource){
@@ -27,7 +29,7 @@ class Store{
     }
 
     patch(id, resource){
-        this.content[id] = resource;
+        this.content[id] = { ...this.content[id], resource};
         this.content[id].id = uuidv4();
         this.content[id].answer = "J'ai patché";
     }
