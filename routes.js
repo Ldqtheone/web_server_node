@@ -1,69 +1,53 @@
 const Router = require('express').Router;
 const router = Router();
-const axios = require('./axios');
+const store = require('./store');
 
-const store = {
-    resources: {
-        1: {
-            name: 'Brian',
-            attr: 'Master'
-        }
+// Enregistrer une route, methode GET, url /resources/ID_RESOURCE
+// Recuperer une ressource avec son id
+router.get('/resources/:id', (req, res) => {
+    const id = req.params.id
+    res.json(store.resources[id])
+})
+
+// Creer une nouvelle ressource
+router.post('/resources', (req, res) => {
+    const resource = req.body
+    //store.resources.add(res.json(resource));
+    // on genere un id grace a la longueur du tableau des keys se trouvant dans notre objets
+    resource.id = Object.keys(store.resources).length + 1 // ['res_id'] -> 1
+    store.resources[resource.id] = resource
+    res.json(resource)
+})
+
+// remplacer une ressource
+router.put('/resources/:id', (req, res) => {
+    const id = req.params.id
+    if (req.params.id === req.body.id) {
+        store.resources[id] = req.body
+        res.json(req.body)
     }
-}
+    else
+        res.status(400).end()
+})
 
-router.get('/resources/select/:id', (req, res) => {
-    console.log(req.params);
-    const idx = req.params.id;
+// patch une ressource
+router.patch('/resources/:id', (req, res) => {
+    const id = req.params.id
+    const resource = { ...store.resources[id], ...req.body }
+    store.resources[id] = resource
+    res.json(resource)
+})
 
-    res.send(store.resources[idx]);
-});
-
-router.get('/resources/add/:name/:attr', (req, res) => {
-
-    const name = req.params.name;
-    const attr = req.params.attr;
-
-    let max = 0;
-
-    for (let maxIndex in store.resources) {
-        max = (max < parseFloat(maxIndex)) ? parseFloat(maxIndex) : max;
+// supprimer
+router.delete('/resources/:id', (req, res) => {
+    const { id } = req.params
+    if (store.resources[id]) {
+        delete store.resources[id]
+        res.json({ success: true })
     }
+    else
+        res.status(404).end()
 
-    let maxValue = max + 1;
+})
 
-    console.log(max + 1);
-
-    store.resources[maxValue] = {
-            name: name,
-            attr: attr
-        };
-
-    console.log(store.resources);
-
-    res.send(store.resources[maxValue]);
-});
-
-router.get('/resources/delete/:id', (req, res) => {
-    const idx = req.params.id;
-
-    delete store.resources[idx];
-
-    console.log(store.resources);
-
-    res.send('Deleting id : ' + idx);
-});
-
-router.get('/resources/update/:id/:newName/:newAttr', (req, res) => {
-    const idx = req.params.id;
-    const newName = req.params.newName;
-    const newAttr = req.params.newAttr;
-
-    store.resources[idx].name = newName;
-    store.resources[idx].attr = newAttr;
-
-    console.log(store.resources);
-
-    res.send('Updated id : ' + idx);
-});
-
-module.exports = router;
+module.exports = router
