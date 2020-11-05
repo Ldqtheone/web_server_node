@@ -37,8 +37,12 @@ async function tests() {
     console.log({ createResult })
     const getResult_1 = await test_get(createResult.id)
     console.log({ getResult_1 })
-
-
+    const replaceResult = await test_replace(getResult_1.id, getResult_1)
+    console.log({ replaceResult })
+    const patchResult = await test_patch(replaceResult.id, replaceResult)
+    console.log({ patchResult })
+    const deleteResult = await test_delete(patchResult.id)
+    console.log({ deleteResult })
 }
 
 tests()

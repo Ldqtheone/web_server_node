@@ -3,27 +3,25 @@ const router = Router();
 const store = require('./store');
 
 // Enregistrer une route, methode GET, url /resources/ID_RESOURCE
-// Recuperer une ressource avec son id
-router.get('/resources/:id', (req, res) => {
-    const id = req.params.id
-    res.json(store.resources[id])
-})
 
 // Creer une nouvelle ressource
 router.post('/resources', (req, res) => {
     const resource = req.body
-    //store.resources.add(res.json(resource));
-    // on genere un id grace a la longueur du tableau des keys se trouvant dans notre objets
-    resource.id = Object.keys(store.resources).length + 1 // ['res_id'] -> 1
-    store.resources[resource.id] = resource
-    res.json(resource)
+    store.resources.add(resource);
+    res.json(resource);
+})
+
+// Recuperer une ressource avec son id
+router.get('/resources/:id', (req, res) => {
+    const id = req.params.id
+    res.json(store.resources.getById(id));
 })
 
 // remplacer une ressource
 router.put('/resources/:id', (req, res) => {
     const id = req.params.id
     if (req.params.id === req.body.id) {
-        store.resources[id] = req.body
+        store.resources.replace(id, req.body)
         res.json(req.body)
     }
     else
@@ -33,16 +31,16 @@ router.put('/resources/:id', (req, res) => {
 // patch une ressource
 router.patch('/resources/:id', (req, res) => {
     const id = req.params.id
-    const resource = { ...store.resources[id], ...req.body }
-    store.resources[id] = resource
+    const resource = { ...store.resources.getById(id), ...req.body }
+    store.resources.patch(id, resource)
     res.json(resource)
 })
 
 // supprimer
 router.delete('/resources/:id', (req, res) => {
-    const { id } = req.params
-    if (store.resources[id]) {
-        delete store.resources[id]
+    const id = req.params.id
+    if (id === req.body.id) {
+        store.resources.delete(id)
         res.json({ success: true })
     }
     else

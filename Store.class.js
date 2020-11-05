@@ -13,18 +13,23 @@ class Store{
 
     add(resource){
         resource.id = uuidv4();
+        this.content[resource.id] = resource;
     }
 
     delete(id){
-
+        delete this.content[id];
     }
 
     replace(id, resource){
-
+        this.content[id] = resource;
+        this.content[id].id = uuidv4();
+        this.content[id].answer = "J'ai replace";
     }
 
     patch(id, resource){
-
+        this.content[id] = resource;
+        this.content[id].id = uuidv4();
+        this.content[id].answer = "J'ai patché";
     }
 
     autoSave() {
